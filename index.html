@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChimbaFood</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="path/to/your/logo.png" alt="ChimbaFood Logo">
+        </div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#restaurantes">Restaurantes</a>
+            <a href="#sobre-nosotros">Sobre Nosotros</a>
+        </nav>
+    </header>
+    
+    <div class="main-content">
+        <section id="inicio" class="hero">
+            <div class="hero-content">
+                <h1>Bienvenido a ChimbaFood</h1>
+                <p>Descubre los mejores restaurantes de la ciudad</p>
+            </div>
+        </section>
+        
+        <section id="restaurantes">
+            <h2>Restaurantes Destacados</h2>
+            <div class="featured-restaurants">
+                <div class="restaurant-card" data-id="1">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Restaurante Delicioso">
+                    <div class="restaurant-card-content">
+                        <h3>Restaurante Delicioso</h3>
+                        <p>Cocina internacional con un toque local</p>
+                        <div class="star-rating">
+                            <input type="radio" id="5-stars-1" name="rating-1" value="5">
+                            <label for="5-stars-1" title="5 estrellas"></label>
+                            <input type="radio" id="4-stars-1" name="rating-1" value="4">
+                            <label for="4-stars-1" title="4 estrellas"></label>
+                            <input type="radio" id="3-stars-1" name="rating-1" value="3">
+                            <label for="3-stars-1" title="3 estrellas"></label>
+                            <input type="radio" id="2-stars-1" name="rating-1" value="2">
+                            <label for="2-stars-1" title="2 estrellas"></label>
+                            <input type="radio" id="1-star-1" name="rating-1" value="1">
+                            <label for="1-star-1" title="1 estrella"></label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Más tarjetas de restaurante -->
+            </div>
+        </section>
+        
+        <section id="sobre-nosotros" class="about-us">
+            <h2>Sobre Nosotros</h2>
+            <p>En ChimbaFood, nos apasiona conectar a los amantes de la buena comida con los mejores restaurantes de la ciudad. Nuestra misión es proporcionar reseñas honestas, calificaciones precisas y toda la información que necesitas para tomar la mejor decisión sobre dónde comer.</p>
+            <p>Con años de experiencia en la escena gastronómica local, nuestro equipo de expertos culinarios recorre la ciudad en busca de joyas culinarias ocultas y los establecimientos más populares por igual. Ya sea que busques una cena romántica, una comida familiar o el mejor lugar para satisfacer tus antojos nocturnos, ChimbaFood tiene la respuesta.</p>
+            <p>Únete a nuestra comunidad foodie y descubre el increíble mundo de sabores que te rodea. ¡Con ChimbaFood, cada comida es una aventura!</p>
+        </section>
+    </div>
+
+    <div class="modal" id="restaurantDetails">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeRestaurantDetails()">&times;</span>
+            <h2 id="restaurantName"></h2>
+            <div class="slider-container">
+                <div class="slider-images">
+                    <img id="photo1" src="" alt="Foto del restaurante 1">
+                    <img id="photo2" src="" alt="Foto del restaurante 2">
+                    <img id="photo3" src="" alt="Foto del restaurante 3">
+                </div>
+                <button class="slider-button prev" onclick="prevSlide()">&#10094;</button>
+                <button class="slider-button next" onclick="nextSlide()">&#10095;</button>
+            </div>
+            <p id="restaurantDescription"></p>
+            <div class="restaurant-map">
+                Aquí se mostraría el mapa con la ubicación del restaurante
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const restaurantDetails = document.getElementById('restaurantDetails');
+        const restaurantCards = document.querySelectorAll('.restaurant-card');
+
+        const restaurants = [
+            {
+                id: 1,
+                name: 'Restaurante Delicioso',
+                description: 'Cocina internacional con un toque local',
+                photos: [
+                    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+                    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+                    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+                ]
+            },
+            // Añade más objetos de restaurante aquí
+        ];
+
+        restaurantCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                const restaurantId = card.getAttribute('data-id');
+                const restaurant = restaurants.find((r) => r.id == restaurantId);
+                if (restaurant) {
+                    const restaurantName = document.getElementById('restaurantName');
+                    const restaurantDescription = document.getElementById('restaurantDescription');
+                    const sliderImages = document.querySelector('.slider-images');
+
+                    restaurantName.textContent = restaurant.name;
+                    restaurantDescription.textContent = restaurant.description;
+
+                    sliderImages.innerHTML = '';
+                    restaurant.photos.forEach((photo, index) => {
+                        const img = document.createElement('img');
+                        img.src = photo;
+                        img.alt = `Foto del restaurante ${index + 1}`;
+                        sliderImages.appendChild(img);
+                    });
+
+                    restaurantDetails.style.display = 'flex';
+                    currentSlide = 0;
+                    showSlide(currentSlide);
+                }
+            });
+        });
+
+        function closeRestaurantDetails() {
+            restaurantDetails.style.display = 'none';
+        }
+
+        let currentSlide = 0;
+
+        function showSlide(slideIndex) {
+            const slides = document.querySelectorAll('.slider-images img');
+            if (slideIndex >= slides.length) {
+                currentSlide = 0;
+            } else if (slideIndex < 0) {
+                currentSlide = slides.length - 1;
+            } else {
+                currentSlide = slideIndex;
+            }
+            const offset = -currentSlide * 100;
+            document.querySelector('.slider-images').style.transform = `translateX(${offset}%)`;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+    </script>
+</body>
+</html>
